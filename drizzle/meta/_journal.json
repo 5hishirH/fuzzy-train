@@ -15,6 +15,20 @@
       "when": 1717902926525,
       "tag": "0001_swift_epoch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1717904571289,
+      "tag": "0002_married_mole_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1717905058907,
+      "tag": "0003_busy_nemesis",
+      "breakpoints": true
     }
   ]
 }

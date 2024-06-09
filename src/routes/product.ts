@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { Hono } from "hono";
-import { products } from "../db/schemas/product.schema";
+import { products } from "../db/schema";
 
 export type Env = {
   DATABASE_URL: string;

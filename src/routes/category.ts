@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { Env } from "../index";
 import dbConnection from "../utils/dbConnection";
-import { categories, products, stocks } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { categories, products, qunatities, stocks } from "../db/schema";
+import { eq, sql } from "drizzle-orm";
 
 const category = new Hono<{ Bindings: Env }>();
 
@@ -33,11 +33,21 @@ category
           category: categories.name,
           pictures: products.pictures,
           stock: stocks.isStock,
+          sizes: sql`json_agg(${qunatities.size})`,
         })
         .from(products)
         .innerJoin(categories, eq(products.categoryId, categories.id))
         .innerJoin(stocks, eq(products.id, stocks.productId))
-        .where(eq(categories.id, categoryId));
+        .innerJoin(qunatities, eq(products.id, qunatities.productId))
+        .where(eq(categories.id, categoryId))
+        .groupBy(
+          products.id,
+          products.name,
+          products.price,
+          categories.name,
+          products.pictures,
+          stocks.isStock
+        );
 
       return c.json(result);
     } catch (error) {

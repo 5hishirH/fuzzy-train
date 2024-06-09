@@ -50,6 +50,13 @@
       "when": 1717914242841,
       "tag": "0006_tranquil_bucky",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1717916475969,
+      "tag": "0007_smooth_speed_demon",
+      "breakpoints": true
     }
   ]
 }

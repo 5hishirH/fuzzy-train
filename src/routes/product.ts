@@ -1,18 +1,13 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
 import { Hono } from "hono";
 import { products } from "../db/schema";
-
-export type Env = {
-  DATABASE_URL: string;
-};
+import { Env } from "../index";
+import dbConnection from "../utils/dbConnection";
 
 const product = new Hono<{ Bindings: Env }>();
 
 product.get("/", async (c) => {
   try {
-    const sql = neon(c.env.DATABASE_URL);
-    const db = drizzle(sql);
+    const db = dbConnection(c.env.DATABASE_URL);
 
     const result = await db.select().from(products);
 

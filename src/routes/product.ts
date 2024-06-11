@@ -16,7 +16,7 @@ product
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .get("/:id", async (c) => {
@@ -26,14 +26,22 @@ product
       const productId = parseInt(c.req.param("id"));
 
       const result = await db
-        .select()
+        .select({
+          id: products.id,
+          name: products.name,
+          categoryName: categories.name,
+          categoryId: categories.id,
+          price: products.price,
+          pictures: products.pictures,
+          info: products.info,
+        })
         .from(products)
         .innerJoin(categories, eq(products.id, productId));
 
       return c.json(result[0]);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .post("/new", async (c) => {
@@ -46,7 +54,7 @@ product
       return c.json(newProduct);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .patch("/:id", async (c) => {
@@ -64,7 +72,7 @@ product
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .delete("/delete/:id", async (c) => {
@@ -81,7 +89,7 @@ product
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   });
 

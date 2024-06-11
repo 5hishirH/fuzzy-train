@@ -40,6 +40,7 @@ npm i -D drizzle-kit postgres dotenv tsx
 ```
 
 ### Define schema
+
 In the source directory create a new db/schemas/product.schema.ts file
 
 ```
@@ -51,4 +52,8 @@ export const products = pgTable('products', {
   description: text('description'),
   price: doublePrecision('price'),
 });
+```
+
+```
+sizes: sql`json_agg(${qunatities.size})`,
 ```

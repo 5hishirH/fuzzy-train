@@ -30,7 +30,7 @@ export const products = pgTable("products", {
   sizechartId: integer("sizechartId").references(() => sizecharts.id),
 });
 
-export const qunatities = pgTable("quantities", {
+export const quantities = pgTable("quantities", {
   id: serial("id").primaryKey(),
   size: text("size").notNull(),
   quantity: integer("quantity").notNull(),

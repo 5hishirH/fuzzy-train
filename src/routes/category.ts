@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { Env } from "../index";
 import dbConnection from "../utils/dbConnection";
-import { categories, products, qunatities, stocks } from "../db/schema";
-import { eq, sql } from "drizzle-orm";
+import { categories, products, quantities, stocks } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 const category = new Hono<{ Bindings: Env }>();
 
@@ -16,7 +16,7 @@ category
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .get("/:id", async (c) => {
@@ -33,26 +33,16 @@ category
           category: categories.name,
           pictures: products.pictures,
           stock: stocks.isStock,
-          sizes: sql`json_agg(${qunatities.size})`,
         })
         .from(products)
         .innerJoin(categories, eq(products.categoryId, categories.id))
         .innerJoin(stocks, eq(products.id, stocks.productId))
-        .innerJoin(qunatities, eq(products.id, qunatities.productId))
-        .where(eq(categories.id, categoryId))
-        .groupBy(
-          products.id,
-          products.name,
-          products.price,
-          categories.name,
-          products.pictures,
-          stocks.isStock
-        );
+        .where(eq(categories.id, categoryId));
 
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .post("/new", async (c) => {
@@ -66,7 +56,7 @@ category
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .patch("/:id", async (c) => {
@@ -83,7 +73,7 @@ category
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   })
   .delete("/:id", async (c) => {
@@ -105,7 +95,7 @@ category
       return c.json({ category: deletedCategory, products: deletedProducts });
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Interal server error!" }, 500);
+      return c.json({ error: "Internal server error!" }, 500);
     }
   });
 

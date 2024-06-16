@@ -6,6 +6,7 @@ import {
   integer,
   boolean,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
@@ -30,16 +31,36 @@ export const products = pgTable("products", {
   sizechartId: integer("sizechartId").references(() => sizecharts.id),
 });
 
+export const productsRelations = relations(products, ({ one, many }) => ({
+  category: one(categories, {
+    fields: [products.categoryId],
+    references: [categories.id],
+  }),
+  sizechart: one(sizecharts, {
+    fields: [products.sizechartId],
+    references: [sizecharts.id],
+  }),
+  quantities: many(quantities),
+}));
+
 export const quantities = pgTable("quantities", {
   id: serial("id").primaryKey(),
   size: text("size").notNull(),
-  quantity: integer("quantity").notNull(),
+  quantity: integer("quantity"),
+  isStock: boolean("isStock").default(true),
   colorName: text("colorName"),
   colorCode: text("colorCode"),
   productId: integer("productId")
     .notNull()
     .references(() => products.id),
 });
+
+export const quantitiesRelations = relations(quantities, ({ one }) => ({
+  product: one(products, {
+    fields: [quantities.productId],
+    references: [products.id],
+  }),
+}));
 
 // temp table, will be removed later
 export const stocks = pgTable("stocks", {

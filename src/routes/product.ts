@@ -1,22 +1,42 @@
 import { Hono } from "hono";
-import { categories, products } from "../db/schema";
+import { categories, products, quantities } from "../db/schema";
+import * as schema from "../db/schema";
 import { Env } from "../index";
 import dbConnection from "../utils/dbConnection";
 import { eq } from "drizzle-orm";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
 const product = new Hono<{ Bindings: Env }>();
 
 product
   .get("/", async (c) => {
     try {
-      const db = dbConnection(c.env.DATABASE_URL);
+      const sql = neon(c.env.DATABASE_URL);
+      const db = drizzle(sql, { schema });
 
-      const result = await db.select().from(products);
+      const result = await db.query.products.findMany({
+        columns: {
+          categoryId: false,
+          sizechartId: false,
+        },
+        with: {
+          category: true,
+          quantities: {
+            columns: {
+              id: true,
+              size: true,
+              isStock: true,
+            },
+          },
+          sizechart: true,
+        },
+      });
 
       return c.json(result);
     } catch (error) {
       console.log(error);
-      return c.json({ error: "Internal server error!" }, 500);
+      return c.json({ message: "Internal server error!" }, 500);
     }
   })
   .get("/:id", async (c) => {
@@ -39,19 +59,6 @@ product
         .innerJoin(categories, eq(products.id, productId));
 
       return c.json(result[0]);
-    } catch (error) {
-      console.log(error);
-      return c.json({ error: "Internal server error!" }, 500);
-    }
-  })
-  .post("/new", async (c) => {
-    try {
-      const db = dbConnection(c.env.DATABASE_URL);
-
-      const body = await c.req.json();
-      const newProduct = await db.insert(products).values(body).returning();
-
-      return c.json(newProduct);
     } catch (error) {
       console.log(error);
       return c.json({ error: "Internal server error!" }, 500);
@@ -94,3 +101,19 @@ product
   });
 
 export default product;
+
+/*
+  .post("/new", async (c) => {
+    try {
+      const db = dbConnection(c.env.DATABASE_URL);
+
+      const body = await c.req.json();
+      const newProduct = await db.insert(products).values(body).returning();
+
+      return c.json(newProduct);
+    } catch (error) {
+      console.log(error);
+      return c.json({ error: "Internal server error!" }, 500);
+    }
+  })
+*/

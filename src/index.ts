@@ -13,7 +13,7 @@ export type Env = {
 const app = new Hono();
 
 app.use(cors({
-    origin: ["http://192.168.0.105:3000", "http://localhost:3000", "https://journeyy-clothes.vercel.app"],
+    origin: "*",
 }))
 
 app.get("/", (c) => {

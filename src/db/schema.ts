@@ -61,12 +61,3 @@ export const quantitiesRelations = relations(quantities, ({ one }) => ({
     references: [products.id],
   }),
 }));
-
-// temp table, will be removed later
-export const stocks = pgTable("stocks", {
-  id: serial("id").primaryKey(),
-  isStock: boolean("isStock").default(true),
-  productId: integer("productId")
-    .notNull()
-    .references(() => products.id),
-});

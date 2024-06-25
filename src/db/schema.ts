@@ -50,10 +50,6 @@ export const productsRelations = relations(products, ({ one, many }) => ({
 export const quantities = pgTable("quantities", {
   id: serial("id").primaryKey(),
   size: text("size").notNull(),
-  quantity: integer("quantity"),
-  isStock: boolean("isStock").default(true),
-  colorName: text("colorName"),
-  colorCode: text("colorCode"),
   productId: integer("productId")
     .notNull()
     .references(() => products.id),

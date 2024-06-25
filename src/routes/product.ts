@@ -27,7 +27,6 @@ product
             columns: {
               id: true,
               size: true,
-              isStock: true,
             },
           },
           sizechart: true,
@@ -60,7 +59,6 @@ product
             columns: {
               id: true,
               size: true,
-              isStock: true,
             },
           },
         },

@@ -31,6 +31,10 @@ export const products = pgTable("products", {
   sizechartId: integer("sizechartId").references(() => sizecharts.id),
 });
 
+export const categoriesRelations = relations(categories, ({many}) => ({
+  products: many(products)
+}))
+
 export const productsRelations = relations(products, ({ one, many }) => ({
   category: one(categories, {
     fields: [products.categoryId],

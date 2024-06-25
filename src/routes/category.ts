@@ -2,7 +2,8 @@ import { Hono } from "hono";
 import { Env } from "../index";
 import dbConnection from "../utils/dbConnection";
 import { categories, products, quantities } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
+import dbConnectionWithSchema from "../utils/dbConnectionWithSchema";
 
 const category = new Hono<{ Bindings: Env }>();
 
@@ -21,21 +22,32 @@ category
   })
   .get("/:id", async (c) => {
     try {
-      const db = dbConnection(c.env.DATABASE_URL);
+      const db = dbConnectionWithSchema(c.env.DATABASE_URL);
 
       const categoryId = parseInt(c.req.param("id"));
 
-      const result = await db
-        .select({
-          id: products.id,
-          name: products.name,
-          price: products.price,
-          category: categories.name,
-          pictures: products.pictures,
-        })
-        .from(products)
-        .innerJoin(categories, eq(products.categoryId, categories.id))
-        .where(eq(categories.id, categoryId));
+      const result = await db.query.categories.findMany({
+        where: eq(categories.id, categoryId),
+        with: {
+          products: {
+            orderBy: [desc(products.id)],
+            columns: {
+              id: true,
+              name: true,
+              price: true,
+              pictures: true,
+            },
+            with: {
+              quantities: {
+                columns: {
+                  id: true,
+                  size: true,
+                },
+              },
+            },
+          },
+        },
+      });
 
       return c.json(result);
     } catch (error) {

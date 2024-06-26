@@ -20,13 +20,33 @@ category
       return c.json({ error: "Internal server error!" }, 500);
     }
   })
+  .get("/allproducts", async (c) => {
+    try {
+      const db = dbConnectionWithSchema(c.env.DATABASE_URL);
+
+      const categories = await db.query.categories.findMany({
+        with: {
+          products: {
+            columns: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      return c.json(categories);
+    } catch (error) {
+      console.log(error);
+      return c.json({ error: "Internal server error!" }, 500);
+    }
+  })
   .get("/:id", async (c) => {
     try {
       const db = dbConnectionWithSchema(c.env.DATABASE_URL);
 
       const categoryId = parseInt(c.req.param("id"));
 
-      const result = await db.query.categories.findMany({
+      const result = await db.query.categories.findFirst({
         where: eq(categories.id, categoryId),
         with: {
           products: {

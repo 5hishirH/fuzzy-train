@@ -5,6 +5,7 @@ import {
   doublePrecision,
   integer,
   boolean,
+  json,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -31,9 +32,9 @@ export const products = pgTable("products", {
   sizechartId: integer("sizechartId").references(() => sizecharts.id),
 });
 
-export const categoriesRelations = relations(categories, ({many}) => ({
-  products: many(products)
-}))
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  products: many(products),
+}));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
   category: one(categories, {
@@ -61,3 +62,11 @@ export const quantitiesRelations = relations(quantities, ({ one }) => ({
     references: [products.id],
   }),
 }));
+
+export const orders = pgTable("orders0", {
+  id: serial("id").primaryKey(),
+  mobile: integer("mobile").notNull(),
+  customer: text("customer").notNull(),
+  address: json("address").notNull(),
+  items: json("items").notNull(),
+});

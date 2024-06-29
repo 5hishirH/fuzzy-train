@@ -69,41 +69,6 @@ product
       console.log(error);
       return c.json({ error: "Internal server error!" }, 500);
     }
-  })
-  .patch("/:id", async (c) => {
-    try {
-      const db = dbConnection(c.env.DATABASE_URL);
-      const productId = parseInt(c.req.param("id"));
-      const body = await c.req.json();
-
-      const result = await db
-        .update(products)
-        .set(body)
-        .where(eq(products.id, productId))
-        .returning();
-
-      return c.json(result);
-    } catch (error) {
-      console.log(error);
-      return c.json({ error: "Internal server error!" }, 500);
-    }
-  })
-  .delete("/delete/:id", async (c) => {
-    try {
-      const db = dbConnection(c.env.DATABASE_URL);
-
-      const productId = parseInt(c.req.param("id"));
-
-      const result = await db
-        .delete(products)
-        .where(eq(products.id, productId))
-        .returning();
-
-      return c.json(result);
-    } catch (error) {
-      console.log(error);
-      return c.json({ error: "Internal server error!" }, 500);
-    }
   });
 
 export default product;

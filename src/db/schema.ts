@@ -6,6 +6,9 @@ import {
   integer,
   boolean,
   json,
+  uuid,
+  time,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -64,9 +67,15 @@ export const quantitiesRelations = relations(quantities, ({ one }) => ({
 }));
 
 export const orders = pgTable("orders0", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
   mobile: integer("mobile").notNull(),
   customer: text("customer").notNull(),
   address: json("address").notNull(),
+  time: timestamp("time").defaultNow(),
+  deliveryPrice: integer("deliveryPrice").notNull(),
+  totalItemsPrice: integer("totalItemsPrice").notNull(),
+  totalOrderPrice: integer("totalOrderPrice").notNull(),
+  isCompleted: boolean("isCompleted").default(false),
+  isApproved: boolean("isApproved").default(false),
   items: json("items").notNull(),
 });

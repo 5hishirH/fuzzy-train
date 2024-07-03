@@ -1,9 +1,8 @@
 import { Hono } from "hono";
 import { Env } from "../index";
-import dbConnection from "../utils/dbConnection";
-import { categories, products, quantities } from "../db/schema";
+import { categories, products } from "../db/schema";
 import { desc, eq } from "drizzle-orm";
-import dbConnectionWithSchema from "../utils/dbConnectionWithSchema";
+import dbConnection from "../db/db-connection";
 
 const category = new Hono<{ Bindings: Env }>();
 
@@ -22,7 +21,7 @@ category
   })
   .get("/allproducts", async (c) => {
     try {
-      const db = dbConnectionWithSchema(c.env.DATABASE_URL);
+      const db = dbConnection(c.env.DATABASE_URL);
 
       const categories = await db.query.categories.findMany({
         with: {
@@ -42,9 +41,9 @@ category
   })
   .get("/:id", async (c) => {
     try {
-      const db = dbConnectionWithSchema(c.env.DATABASE_URL);
+      const db = dbConnection(c.env.DATABASE_URL);
 
-      const categoryId = parseInt(c.req.param("id"));
+      const categoryId = c.req.param("id");
 
       const result = await db.query.categories.findFirst({
         where: eq(categories.id, categoryId),
@@ -56,14 +55,7 @@ category
               name: true,
               price: true,
               pictures: true,
-            },
-            with: {
-              quantities: {
-                columns: {
-                  id: true,
-                  size: true,
-                },
-              },
+              sizes: true,
             },
           },
         },

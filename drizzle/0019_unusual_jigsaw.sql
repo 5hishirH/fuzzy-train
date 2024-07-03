@@ -1,1 +1,0 @@
-ALTER TABLE "orders0" DROP COLUMN IF EXISTS "referenceCode";

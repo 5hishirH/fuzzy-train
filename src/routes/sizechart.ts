@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Env } from "../index";
-import dbConnection from "../utils/dbConnection";
+import dbConnection from "../db/db-connection";
 import { eq } from "drizzle-orm";
 import { sizecharts } from "../db/schema";
 

@@ -127,6 +127,20 @@
       "when": 1719754739742,
       "tag": "0017_daily_the_anarchist",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1719804454213,
+      "tag": "0018_new_kinsey_walden",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1719817309369,
+      "tag": "0019_unusual_jigsaw",
+      "breakpoints": true
     }
   ]
 }

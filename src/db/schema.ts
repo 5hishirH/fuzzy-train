@@ -7,7 +7,6 @@ import {
   boolean,
   json,
   uuid,
-  time,
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
@@ -75,7 +74,8 @@ export const orders = pgTable("orders0", {
   deliveryPrice: integer("deliveryPrice").notNull(),
   totalItemsPrice: integer("totalItemsPrice").notNull(),
   totalOrderPrice: integer("totalOrderPrice").notNull(),
-  isCompleted: boolean("isCompleted").default(false),
   isApproved: boolean("isApproved").default(false),
+  isCompleted: boolean("isCompleted").default(false),
+  isCanceled: boolean("isCanceled").default(false),
   items: json("items").notNull(),
 });

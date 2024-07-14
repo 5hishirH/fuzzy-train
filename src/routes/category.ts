@@ -49,7 +49,7 @@ category
         where: eq(categories.id, categoryId),
         with: {
           products: {
-            orderBy: [desc(products.id)],
+            orderBy: [desc(products.launchedat)],
             columns: {
               id: true,
               name: true,

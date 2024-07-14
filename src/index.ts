@@ -3,7 +3,6 @@ import product from "./routes/product";
 import category from "./routes/category";
 import sizechart from "./routes/sizechart";
 import { cors } from "hono/cors";
-import order from "./routes/order";
 
 export type Env = {
   DATABASE_URL: string;
@@ -24,6 +23,5 @@ app.get("/", (c) => {
 app.route("/category", category);
 app.route("/sizechart", sizechart);
 app.route("/product", product);
-app.route("/order", order);
 
 export default app;
